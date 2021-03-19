@@ -6,7 +6,6 @@ const ReviewDetails = require('../models/moviefeedbacks');
 
 
 router.get('/:moviename', (req,res) => {
-    console.log(req.params.moviename);
     ReviewDetails.find({ moviename: req.params.moviename })
     .then(blogs => {
         let sum = 0;
@@ -18,7 +17,6 @@ router.get('/:moviename', (req,res) => {
         })
         let avg = sum/count;
         avg = Math.round(avg * 100) / 100
-        console.log(avg);
         res.status(200).send({ratingavg: avg})
         }, err => {
         console.log(`Error in finding blogs ${err}`);
@@ -39,9 +37,6 @@ router.post('/myratings', auth.authenticate, (req, res) => {
     }
 
     const {movie_name, rating, description } = req.body;
-    console.log(movie_name);
-    console.log(rating);
-    console.log(description);
 
     if (!rating) {
         res.status(400).send({error: "Please provide Rating"});
