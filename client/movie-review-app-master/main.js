@@ -93,7 +93,6 @@ function getMovie() {
             <h5>Released: ${movie.Released}</h5>
             <h5>Genre: ${movie.Genre}</h5>
             <h5>Director: ${movie.Director}</h5>
-
             <h5>Writer: ${movie.Writer}</h5>
             <h5>Actors: ${movie.Actors}</h5>
             <h5>Director: ${movie.Director}</h5>
@@ -102,16 +101,23 @@ function getMovie() {
             <h5>Director: ${movie.Director}</h5>
             <h5>Director: ${movie.Director}</h5>
             <h5>Director: ${movie.Director}</h5>
-            <h5>Director: ${movie.Director}</h5>
-            
-
+            <h5>Director: ${movie.Director}</h5>           
+             <h5 class = "rating">Average Rating : </h5>
+            <h5 class = "count">Count Ratings : </h5>
+            <a onclick="reviewTitle('${movie.Title}')"  href="http://127.0.0.1:5500/client/movie-review-app-master/index2.html">Review Title</a>
             </div>
             </div>
 
             `;
+            movieInfoBox.appendChild(movieElement);
+            getaveragerating(movie.Title);
+            localStorage.setItem("moviename", movie.Title);
+
+
         }
     });
-    movieInfoBox.appendChild(movieElement);
+
+
 }
 
 const moviesInfo = [
@@ -921,3 +927,89 @@ const moviesInfo = [
         Response: 'True',
     },
 ];
+
+function getaveragerating(title){
+    const request = new Request(`http://localhost:3000/api/reviews/${title}`, {
+        method: 'GET',
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        }),
+        mode: 'cors'
+    });
+    const r =  fetch(request)
+    .then((resp) => {return resp.json()})
+    .then((data) => {
+        if(data.ratingavg === 0){
+            document.getElementsByClassName('rating')[0].innerHTML =  `Avergae Rating : No Ratings Yet!`;
+        }
+        else{
+            document.getElementsByClassName('rating')[0].innerHTML =  `Avergae Rating : ${data.ratingavg}`;
+        }
+        if(data.reviewcount === 0){
+            document.getElementsByClassName('count')[0].innerHTML =  `Rating Count : No Users have rated this movie`;
+        }
+        else{
+            document.getElementsByClassName('count')[0].innerHTML =  `Rating Count : ${data.reviewcount}`;
+
+        }
+
+})
+
+
+// const forElement = document.querySelector("#form1");
+// formElement.addEventListener('submit', e => {
+//   e.preventDefault();
+//   const formData = new FormData(formElement);
+//   const request = new Request('http://localhost:3000/api/reviews/myratings', {
+//       method: 'POST',
+//       headers: new Headers({
+//           'Content-Type': 'application/json'
+//       }),
+//       body: formData
+//   });
+
+//   fetch(request).then(res => {res.send()});
+// });
+
+// //sign up
+// // {
+// //     "email" : "anonymous123@gmail.com",
+// //     "password" : "123",
+// //     "firstName" : "Abhinav",
+// //     "lastName" : "Kumar"
+// // }
+// const formElement = document.querySelector("#form2");
+// formElement.addEventListener('submit', e => {
+//   e.preventDefault();
+//   const formData = new FormData(formElement);
+//   const request = new Request('http://localhost:3000/api/users/', {
+//       method: 'POST',
+//       headers: new Headers({
+//           'Content-Type': 'application/json'
+//       }),
+//       body: formData
+//   });
+
+//   fetch(request).then(res => {res.send()});
+// });
+
+// //login 
+// // {
+// //     "email" : "anonymous123@gmail.com",
+// //     "password" : "123"
+// // }
+// const formElement = document.querySelector("#form3");
+// formElement.addEventListener('submit', e => {
+//   e.preventDefault();
+//   const formData = new FormData(formElement);
+//   const request = new Request('http://localhost:3000/api/users/', {
+//       method: 'POST',
+//       headers: new Headers({
+//           'Content-Type': 'application/json'
+//       }),
+//       body: formData
+//   });
+
+//   fetch(request).then(res => {res.send()});
+// });
+}

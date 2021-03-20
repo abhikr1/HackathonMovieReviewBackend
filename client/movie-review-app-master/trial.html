@@ -1,0 +1,27 @@
+<form id="form">
+    <div>
+      <label for="name">Name: </label>
+      <input type="text" name="name">
+    </div>
+    <div>
+      <label for="email">Email: </label>
+      <input type="email" name="email">
+    </div>
+    <div>
+      <input type="submit" value="Submit">
+    </div>
+  </form>
+  <script>
+    const formElement = document.querySelector("#form");
+    console.log("hello");
+    console.log(formElement);
+    formElement.addEventListener('submit', e => {
+      e.preventDefault();
+      //Your logic goes here
+      const formData = new FormData(formElement);
+    // At this stage formData object contains the form data.
+    // The way to access it is through formData.entries() iterator
+    // We can also get keys or values through keys() and values()
+    console.log(...formData.entries());
+    });
+  </script>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .overlay {
+            height : 100%;
+            width : 0;
+            position : fixed;
+            z-index: 1;
+            top: 0;
+            left: 795px;
+            background-color: white;
+            background-color: lightblue;
+            overflow-x: hidden;
+            transition: 0.5s;
+        }
+        .overlay a {
+            padding : 8px;
+            text-decoration: none;
+            font-size : 36px;
+            color : #fff;
+            transition: 0.5s;
+            margin-left: 485px;
+        }
+        .overlay a:hover{
+            cursor: pointer;;
+        }
+    </style>
+</head>
+<body>
+    <section class="main">
+        <div id = "navbar" class = "overlay">
+
+        <a href = "#" class = "closebtn" onclick="return closeNav()">X</a>
+        <div class="content">
+             <form class = "formpage">
+        <ul class = "form-container">
+            <li style="font-family: 13px Arial;"><b style="font-family: Arial, Helvetica, sans-serif; font-size: 23px;">Enter Reviews</b></li>
+            <li>
+                <label for = "Rating">
+                  <span style="font-family: Arial, Helvetica, sans-serif; font-size: 15px;">Rating</span>
+                </label>
+                <input type = "Description" name = "rating" id = "description"/>
+            </li>
+            <li>
+                <label for = "Description">
+                  <span id = "description" style="font-family: Arial, Helvetica, sans-serif; font-size: 15px;">Description</span>
+                </label>
+                <input type =  "text" name = "description" id = "text" />
+            </li>
+            <li>
+                <button type = "submit" class = "button primary">
+                   Submit Feedback
+                </button>
+            </li>
+        </ul>
+    </form>
+        </div>
+       </div>
+       <a href = "#" id = "lol" onclick="return openNav();">Link</a>
+    </section>
+    <script>
+        function openNav() {
+            var name=localStorage.getItem("moviename");
+            document.getElementById("navbar").style.width = "40%";
+            return false;
+        }
+        function closeNav() {
+            document.getElementById("navbar").style.width = "0%";
+            return false;
+        }
+        const formElement = document.querySelector(".formpage");
+    formElement.addEventListener('submit', e => {
+  e.preventDefault();
+  const formData = new FormData(formElement);
+  
+  formData.append("movie_name", localStorage.getItem("moviename"));
+
+  console.log(...formData.entries());
+
+    const request = new Request('http://localhost:3000/api/reviews/myratings', {
+      method: 'POST',
+      headers: new Headers({
+          'Content-Type': 'application/json'
+      }),
+      body: formData
+  });
+    var name=localStorage.getItem("moviename");
+            console.log(name);
+  fetch(request).then(res => res.json()).then(json => console.log(json));
+});
+    </script>
+</body>
+</html>

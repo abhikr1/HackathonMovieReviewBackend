@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+    }
+    .form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 25rem;
+  padding: 2rem;
+  border: 0.1rem #c0c0c0 solid;
+  border-radius: 0.5rem;
+  list-style-type: none;
+}
+.form-container li {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+.button {
+  padding: 1rem;
+  border: 0.1rem #808080 solid;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.button:hover {
+  border: 0.1rem #404040 solid;
+}
+.button.primary {
+  background-color: #f0c040;
+}
+input {
+  padding: 1rem;
+  border: 0.1rem #c0c0c0 solid;
+  border-radius: 0.5rem;
+}
+#pwd {
+   margin-right: 180px;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+  </style>
+</head>
+<body>
+  <div class = "form">
+    <form>
+        <ul class = "form-container">
+            <li style="font-family: 13px Arial;"><b style="font-family: Arial, Helvetica, sans-serif; font-size: 23px;">Create your Account</b></li>
+            <li>
+                <label for = "email">
+                  <span style="font-family: Arial, Helvetica, sans-serif; font-size: 15px;">Email</span>
+                </label>
+                <input type = "email" name = "email" id = "email"/>
+            </li>
+            <li>
+                <label for = "password">
+                  <span id = "pwd" style="font-family: Arial, Helvetica, sans-serif; font-size: 15px;">Password</span>
+                </label>
+                <input type =  "password" name = "password" id = "password" />
+            </li>
+            <li>
+                <button type = "submit" class = "button primary">
+                   Sign-Up
+                </button>
+            </li>
+        </ul>
+    </form>
+    </div>
+</body>
+</html>

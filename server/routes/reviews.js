@@ -10,14 +10,17 @@ router.get('/:moviename', (req,res) => {
     .then(blogs => {
         let sum = 0;
         let count = 0;
+        let avg = 0;
+
         blogs.forEach(blog => {
             console.log(blog.rating);
             sum = sum + blog.rating;
             count ++;
         })
-        let avg = sum/count;
+        if(count != 0)
+            avg = sum/count;
         avg = Math.round(avg * 100) / 100
-        res.status(200).send({ratingavg: avg})
+        res.status(200).send({ratingavg: avg, reviewcount : count})
         }, err => {
         console.log(`Error in finding blogs ${err}`);
     });
@@ -28,9 +31,9 @@ router.get('/:moviename', (req,res) => {
 router.post('/myratings', auth.authenticate, (req, res) => {
     console.log(req.body.movie_name)
     let email;
-    if (!req.session.userId) {
-        res.send(401).send({ error: "Not logged in"});
-    }
+    // if (!req.session.userId) {
+    //     res.send(401).send({ error: "Not logged in"});
+    // }
     if (!req.body) {
         res.status(400).send({error: "Rating Daal"});
         return;
