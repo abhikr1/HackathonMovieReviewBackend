@@ -33,7 +33,7 @@ router.post('/', (req, res) => {
             res.status(400).send({message: "Incorrect email or password"});
             return;
         }
-
+        req.session.success = true;
         req.session.userId = user.id;
         console.log(req.session.userId);
 

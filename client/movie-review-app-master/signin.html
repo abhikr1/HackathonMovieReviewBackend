@@ -64,6 +64,8 @@
   const formData = new FormData(formElement);
   var object = {};
 formData.forEach((value, key) => object[key] = value);
+console.log(object["email"]);
+formData.append("movie_name", localStorage.setItem("email", object["email"]));
 const json = JSON.stringify(object);
     console.log(json);
   const request = new Request('http://localhost:3000/api/sessions', {

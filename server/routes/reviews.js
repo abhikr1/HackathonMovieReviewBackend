@@ -29,36 +29,37 @@ router.get('/:moviename', (req,res) => {
 
 
 
-router.post('/myratings', auth.authenticate, (req, res) => {
-    console.log(req.body.movie_name)
-    let email;
-    if (!req.session.userId) {
-        res.send(401).send({ message : "Not logged in"});
-    }
+router.post('/myratings', (req, res) => {
+    console.log(req.body.movie_name);
+    req.session.success = true;
+    // if (!req.session.userId) {
+    //     res.send(401).send({message : "Not logged in"});
+    //     return;
+    // }
     // if (!req.body.rating) {
     //     res.status(400).send({message: "Please enter the rating"});
     //     return;
-    // }
+    //
 
-    const {movie_name, rating, description } = req.body;
-
+    const {movie_name, rating, description, email } = req.body;
+    console.log(req.body);
     if (!rating) {
-        res.status(400).send({message: "Please provide Rating"});
+        res.status(200).send({message: "Please provide Rating"});
         return;
     }
 
     if (!description) {
-        res.status(400).send({message: "Enter a description"});
+        res.status(200).send({message: "Enter a description"});
         return;
     }
      
-    email_id = UserCredential.findOne({ _id : req.session.userId}).then(User => {
-        if (User) {
-            email = User.email
+    // email_id = UserCredential.findOne({ _id : req.session.userId}).then(User => {
+        // if (User) {
+            
 
         ReviewDetails.findOne({ email, moviename : movie_name }).then(user => {
         if (user) {
-            res.status(400).send({message: "Rating for this movie is already added by the user"});
+            res.status(200).send({message: "Rating for this movie is already added by the user"});
             return;
         }
 
@@ -73,7 +74,7 @@ router.post('/myratings', auth.authenticate, (req, res) => {
     }).catch(() => {
         res.status(500).send({ message: "Internal Server Error" });
     });
-}    
-});
+   
+
 });
 module.exports = router;

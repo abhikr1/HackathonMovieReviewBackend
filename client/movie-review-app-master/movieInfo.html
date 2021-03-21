@@ -31,10 +31,10 @@
             <h3 style="text-align: center;">Add a review</h3>
     
             <label for="Rating"><b>Your Rating</b></label>
-            <input type="text" placeholder="Enter your rating here" name="rate" id="rate" required>
+            <input type="text" placeholder="Enter your rating here" name="rating" id="rate" required>
     
             <label for="review"><b>Your Review</b></label>
-            <input type="text" placeholder="Enter your review here" name="review" id ="review" required>
+            <input type="text" placeholder="Enter your review here" name="description" id ="review" required>
     
             <button type="submit" class="btn">Submit</button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
@@ -70,6 +70,7 @@
   e.preventDefault();
   const formData = new FormData(formElement);
   formData.append("movie_name", localStorage.getItem("moviename"));
+  formData.append("email", localStorage.getItem("email"));
   var object = {};
 formData.forEach((value, key) => object[key] = value);
 const json = JSON.stringify(object);
@@ -91,8 +92,9 @@ const json = JSON.stringify(object);
     }
     })
     .catch(error => {
+        console.log("ss")
         closeForm();
-        if(error.message === "Not logged in"){
+        if(error === "Not logged in"){
         window.location.href = "signin.html";
     }
     console.log(error.errors) //Prints list of errors

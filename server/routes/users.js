@@ -33,13 +33,13 @@ router.post('/', (req, res) => {
             res.status(404).send({message: "User already signed up"});
             return;
         }
-            console.log("test");
         const hash = bcrypt.hashSync(password);
 
         const userCredential = new UserCredential({ email, password: hash });
         userCredential.save().then(() => {
             const user = new User({ _id: userCredential.id, email, firstName : firstName, lastName : lastName });
             user.save().then(() => {
+                
                 res.status(201).send({ id: userCredential.id, message : "Successfully Created" });
             });
         });
