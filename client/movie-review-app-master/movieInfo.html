@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://bootswatch.com/cyborg/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
 
 </head>
@@ -19,12 +18,88 @@
         </div>
 
         <div class="hd-btn">
-                <div><a href="#"><span class="glyphicon glyphicon-user"></span>  Sign Up</a></div>
-                 <div> <a href="#"><span class="glyphicon glyphicon-log-in"></span>  Login</a></div>
+                <div><a href="./createaccount.html"><span class="glyphicon glyphicon-user"></span>  Sign Up</a></div>
+                 <div> <a href="./signin.html"><span class="glyphicon glyphicon-log-in"></span>  Login</a></div>
         </div>
     </header>
 
-    <div id="container1"></div>
+    
+    <div id="container1">
+    </div>
+    <div class="form-popup" id="myForm">
+        <form class="form-container">
+            <h3 style="text-align: center;">Add a review</h3>
+    
+            <label for="Rating"><b>Your Rating</b></label>
+            <input type="text" placeholder="Enter your rating here" name="rate" id="rate" required>
+    
+            <label for="review"><b>Your Review</b></label>
+            <input type="text" placeholder="Enter your review here" name="review" id ="review" required>
+    
+            <button type="submit" class="btn">Submit</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+    </div>
+
+    <footer>
+        <div class="footer-text">
+            <h4>Made with <span class="fa fa-heart"></span> by Team1</h4>
+        </div>
+        <div class="footer-icons">
+            <ul>
+                <li> <a href="https://github.com/aangupta"class="fa fa-github"target="_blank"></a></li>
+                <li> <a href="https://www.linkedin.com/in/aanchal-gupta-3ab35bb1/" class="fa fa-linkedin" target="_blank"></a></li>
+                <li><a href="https://twitter.com/aangupta5"class="fa fa-twitter"target="_blank"></a> </li>
+                <li> <a href="mailto: aanchalgupta457@gmail.com" class="fa fa-envelope" target="_blank"></a> </li>
+            </ul>
+            
+        </div>
+    </footer>
+
+    <script>
+        function openForm() {
+          document.getElementById("myForm").style.display = "block";
+        }
+        
+        function closeForm() {
+          document.getElementById("myForm").style.display = "none";
+        }
+
+        const formElement = document.querySelector(".form-container");
+  formElement.addEventListener('submit', e => {
+  e.preventDefault();
+  const formData = new FormData(formElement);
+  formData.append("movie_name", localStorage.getItem("moviename"));
+  var object = {};
+formData.forEach((value, key) => object[key] = value);
+const json = JSON.stringify(object);
+    console.log(json);
+  const request = new Request('http://localhost:3000/api/reviews/myratings', {
+    method: 'POST',
+    headers : {
+    'Content-type': 'application/json; charset=UTF-8'
+    },
+    body: json
+  })
+  fetch(request).then(res => res.json()).then(data => {
+    alert(data.message);
+    if(data.message === "Not logged in"){
+        window.location.href = "signin.html";
+    }
+    else{
+        alert(data.message);
+    }
+    })
+    .catch(error => {
+        closeForm();
+        if(error.message === "Not logged in"){
+        window.location.href = "signin.html";
+    }
+    console.log(error.errors) //Prints list of errors
+    });
+});
+
+    </script>
 
     <script src="./main.js"></script>
     <script>

@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../middlewares/auth');
 const UserCredential = require('../models/user-credential');
 const ReviewDetails = require('../models/moviefeedbacks');
+const request = require('request');
 
 
 router.get('/:moviename', (req,res) => {
@@ -31,23 +32,23 @@ router.get('/:moviename', (req,res) => {
 router.post('/myratings', auth.authenticate, (req, res) => {
     console.log(req.body.movie_name)
     let email;
-    // if (!req.session.userId) {
-    //     res.send(401).send({ error: "Not logged in"});
-    // }
-    if (!req.body) {
-        res.status(400).send({error: "Rating Daal"});
-        return;
+    if (!req.session.userId) {
+        res.send(401).send({ message : "Not logged in"});
     }
+    // if (!req.body.rating) {
+    //     res.status(400).send({message: "Please enter the rating"});
+    //     return;
+    // }
 
     const {movie_name, rating, description } = req.body;
 
     if (!rating) {
-        res.status(400).send({error: "Please provide Rating"});
+        res.status(400).send({message: "Please provide Rating"});
         return;
     }
 
     if (!description) {
-        res.status(400).send({error: "Enter a description"});
+        res.status(400).send({message: "Enter a description"});
         return;
     }
      
@@ -57,7 +58,7 @@ router.post('/myratings', auth.authenticate, (req, res) => {
 
         ReviewDetails.findOne({ email, moviename : movie_name }).then(user => {
         if (user) {
-            res.status(400).send({error: "Rating for this movie is already added by the user"});
+            res.status(400).send({message: "Rating for this movie is already added by the user"});
             return;
         }
 
@@ -70,7 +71,7 @@ router.post('/myratings', auth.authenticate, (req, res) => {
                 res.status(201).send({message : 'Feedback Submitted'});
             });
     }).catch(() => {
-        res.status(500).send({ error: "Internal Server Error" });
+        res.status(500).send({ message: "Internal Server Error" });
     });
 }    
 });

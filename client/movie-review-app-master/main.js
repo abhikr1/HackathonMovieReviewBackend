@@ -52,74 +52,94 @@ function movieSelected(id) {
     return false;
 }
 
-document.onclick = function (e) {
-    const { target } = e;
-    if (target.tagName.toLowerCase() === 'img') {
-        const movieId = e.target.attributes.data_movie_id.value;
-        sessionStorage.setItem('movieId', movieId);
-        window.location.href = 'movieInfo.html';
-        getMovieInfo();
-
-        /* fetch(`https://api.themoviedb.org/3/movie/${movieId.value}/videos?api_key=c4532ec243ac17d342a9ade8e64582b1`)
-            .then((res) => res.json())
-            .then((data) => createVideoTemplate(data, content))
-            .catch((error) => {
-                console.log(error);
-            }); */
-    }
-    /* if (target.id === 'content-close') {
-        const content = e.target.parentElement;
-        content.classList.remove('content-display');
-    } */
-};
+function getaveragerating(title) {
+    const request = new Request(`http://localhost:3000/api/reviews/${title}`, {
+        method: 'GET',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+        }),
+        mode: 'cors',
+    });
+    const r = fetch(request)
+        .then((resp) => resp.json())
+        .then((data) => {
+            if (data.ratingavg === 0) {
+                document.getElementsByClassName('rating')[0].innerHTML = `Avergae Rating : No Ratings Yet!`;
+            } else {
+                document.getElementsByClassName('rating')[0].innerHTML = `Avergae Rating : ${data.ratingavg}`;
+            }
+            if (data.reviewcount === 0) {
+                document.getElementsByClassName('count')[0].innerHTML = `Rating Count : No Users have rated this movie`;
+            } else {
+                document.getElementsByClassName('count')[0].innerHTML = `Rating Count : ${data.reviewcount}`;
+            }
+        });
+}
 
 function getMovie() {
     const movieId = sessionStorage.getItem('movieId');
     console.log('hi there');
     console.log(movieId);
-    const id = movieId.slice(0, -1);
     movieInfoBox.innerHTML = '';
     const movieElement = document.createElement('div');
     movieElement.classList.add('movie1');
     moviesInfo.forEach((movie) => {
         console.log('inarrayfunction');
-        if (movie.id === id) {
+        if (movie.id === movieId) {
             movieElement.innerHTML = `
-            <div class="movie-group">
-            <div class ="img"><img src = ${IMG_URL + movie.poster_path} data_movie_id = ${movie.id}/></div>
-            <div class="movie-info1">
-            <h3>Title: ${movie.Title}</h3>
-            <h5>Plot: ${movie.Plot}</h5>
-            <h5>Released: ${movie.Released}</h5>
-            <h5>Genre: ${movie.Genre}</h5>
-            <h5>Director: ${movie.Director}</h5>
-            <h5>Writer: ${movie.Writer}</h5>
-            <h5>Actors: ${movie.Actors}</h5>
-            <h5>Director: ${movie.Director}</h5>
-            <h5>Director: ${movie.Director}</h5>
-            <h5>Director: ${movie.Director}</h5>
-            <h5>Director: ${movie.Director}</h5>
-            <h5>Director: ${movie.Director}</h5>
-            <h5>Director: ${movie.Director}</h5>
-            <h5>Director: ${movie.Director}</h5>           
-             <h5 class = "rating">Average Rating : </h5>
-            <h5 class = "count">Count Ratings : </h5>
-            <a onclick="reviewTitle('${movie.Title}')"  href="http://127.0.0.1:5500/client/movie-review-app-master/index2.html">Review Title</a>
-            </div>
-            </div>
-
-            `;
+        <div class="movie-group1">
+        <div class ="title-bar">
+        <h3>${movie.Title}</h3>
+        <div class='span-d'>
+        <span>${movie.Runtime}</span>
+        <span>|</span>   
+        <span>${movie.Genre}</span>
+        <span>|</span> 
+        <span>${movie.Released}(${movie.Country})</span>
+        </div>
+        </div>
+        <div class ="img"><img src = ${IMG_URL + movie.poster_path} data_movie_id = ${movie.id}/></div>
+        <div class="movie-info1">
+        <h3>Storyline</h3>
+        <h4>${movie.Plot}
+        <hr>
+        </h4>
+        <div>
+       
+        <h4>Director: ${movie.Director}</h4>
+        <h4>Writer: ${movie.Writer}</h4>
+        <h4>Actors: ${movie.Actors}</h4>
+        <hr>
+        </div>
+        <div>
+        <h3>Details</h3>
+        <h4>Country: ${movie.Country}</h4>
+        <h4>Language: ${movie.Language}</h4>
+        <h4>Released Date: ${movie.Released}</h4>
+        <h4>Runtime: ${movie.Runtime}</h4>
+        </div>   
+        <h4 class = "rating">Average Rating: </h4>
+        <h4 class = "count">Rating Count: </h4> 
+        <a onclick= "return openForm()" href="#"><h4>Review this title<h4></a>   
+        
+      
+        </div>
+        </div>
+        `;
             movieInfoBox.appendChild(movieElement);
             getaveragerating(movie.Title);
-            localStorage.setItem("moviename", movie.Title);
-
-
+            localStorage.setItem('moviename', movie.Title);
         }
     });
-
-
 }
 
+function openForm() {
+    document.getElementById('myForm').style.display = 'block';
+}
+
+function closeForm() {
+    document.getElementById('myForm').style.display = 'none';
+}
 const moviesInfo = [
     {
         id: '791373',
@@ -252,7 +272,7 @@ const moviesInfo = [
         Actors: 'Melanie Zanetti, Giulio Berruti, James Andrew Fraser, Margaux Brooke',
         Plot:
             "An intriguing exploration of seduction, forbidden love, and redemption, a captivating and passionate tale of one man's escape from his own personal hell as he tries to earn the impossible: forgiveness and love.",
-        Language: 'N/A',
+        Language: 'English',
         Country: 'USA',
         Awards: 'N/A',
         Poster:
@@ -288,8 +308,8 @@ const moviesInfo = [
         Actors: 'Giulio Berruti, James Andrew Fraser, Rhett Wellington Ramirez, Melanie Zanetti',
         Plot:
             "Professor Emerson learns the truth about Julia but his realization comes too late. Julia is done waiting for him to remember her and wants nothing more to do with him. Can Gabriel win back her heart before she finds love in another's arms?",
-        Language: 'N/A',
-        Country: 'N/A',
+        Language: 'English',
+        Country: 'USA',
         Awards: 'N/A',
         Poster:
             'https://m.media-amazon.com/images/M/MV5BMzk3NzEwMWItYmVhMS00ODRiLWEyNDUtOTNmZTBhMDNjMjFmXkEyXkFqcGdeQXVyMTY1NjM1Nzc@._V1_SX300.jpg',
@@ -320,12 +340,12 @@ const moviesInfo = [
         Runtime: '102 min',
         Genre: 'Romance',
         Director: 'Tosca Musk',
-        Writer: 'N/A',
+        Writer: 'Mary Pocrnic (screenplay)',
         Actors: 'Melanie Zanetti, Giulio Berruti, Rhett Wellington, James Andrew Fraser',
         Plot:
             "Someone dark returns from Julia's past with bad intentions. Gabriel has secrets he needs to share, but worries that he'll lose everything if he does. Will their relationship weather the test of secrets revealed?",
-        Language: 'N/A',
-        Country: 'N/A',
+        Language: 'English',
+        Country: 'USA',
         Awards: 'N/A',
         Poster:
             'https://m.media-amazon.com/images/M/MV5BNjJmNTZjZTUtYzllMS00NzBhLTlhMjgtNTkxNGQ4ZjI0YzI4XkEyXkFqcGdeQXVyMTY1NjM1Nzc@._V1_SX300.jpg',
@@ -926,35 +946,95 @@ const moviesInfo = [
         Website: 'N/A',
         Response: 'True',
     },
+    {
+        id: '13',
+        poster_path: 'h5J4W4veyxMXDMjeNxZI46TsHOb.jpg',
+        Title: 'Forrest Gump',
+        Year: '1994',
+        Rated: 'PG-13',
+        Released: '06 Jul 1994',
+        Runtime: '142 min',
+        Genre: 'Drama, Romance',
+        Director: 'Robert Zemeckis',
+        Writer: 'Winston Groom (novel), Eric Roth (screenplay)',
+        Actors: 'Tom Hanks, Rebecca Williams, Sally Field, Michael Conner Humphreys',
+        Plot:
+            'The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold from the perspective of an Alabama man with an IQ of 75, whose only desire is to be reunited with his childhood sweetheart.',
+        Language: 'English',
+        Country: 'USA',
+        Awards: 'Won 6 Oscars. Another 44 wins & 75 nominations.',
+        Poster:
+            'https://m.media-amazon.com/images/M/MV5BNWIwODRlZTUtY2U3ZS00Yzg1LWJhNzYtMmZiYmEyNmU1NjMzXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg',
+        Ratings: [
+            {
+                Source: 'Internet Movie Database',
+                Value: '8.8/10',
+            },
+            {
+                Source: 'Rotten Tomatoes',
+                Value: '71%',
+            },
+            {
+                Source: 'Metacritic',
+                Value: '82/100',
+            },
+        ],
+        Metascore: '82',
+        imdbRating: '8.8',
+        imdbVotes: '1,826,575',
+        imdbID: 'tt0109830',
+        Type: 'movie',
+        DVD: '01 Aug 2013',
+        BoxOffice: '$330,455,270',
+        Production: 'Paramount Pictures',
+        Website: 'N/A',
+        Response: 'True',
+    },
+    {
+        id: '13',
+        poster_path: 'h5J4W4veyxMXDMjeNxZI46TsHOb.jpg',
+        Title: 'Forrest Gump',
+        Year: '1994',
+        Rated: 'PG-13',
+        Released: '06 Jul 1994',
+        Runtime: '142 min',
+        Genre: 'Drama, Romance',
+        Director: 'Robert Zemeckis',
+        Writer: 'Winston Groom (novel), Eric Roth (screenplay)',
+        Actors: 'Tom Hanks, Rebecca Williams, Sally Field, Michael Conner Humphreys',
+        Plot:
+            'The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold from the perspective of an Alabama man with an IQ of 75, whose only desire is to be reunited with his childhood sweetheart.',
+        Language: 'English',
+        Country: 'USA',
+        Awards: 'Won 6 Oscars. Another 44 wins & 75 nominations.',
+        Poster:
+            'https://m.media-amazon.com/images/M/MV5BNWIwODRlZTUtY2U3ZS00Yzg1LWJhNzYtMmZiYmEyNmU1NjMzXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg',
+        Ratings: [
+            {
+                Source: 'Internet Movie Database',
+                Value: '8.8/10',
+            },
+            {
+                Source: 'Rotten Tomatoes',
+                Value: '71%',
+            },
+            {
+                Source: 'Metacritic',
+                Value: '82/100',
+            },
+        ],
+        Metascore: '82',
+        imdbRating: '8.8',
+        imdbVotes: '1,826,575',
+        imdbID: 'tt0109830',
+        Type: 'movie',
+        DVD: '01 Aug 2013',
+        BoxOffice: '$330,455,270',
+        Production: 'Paramount Pictures',
+        Website: 'N/A',
+        Response: 'True',
+    }
 ];
-
-function getaveragerating(title){
-    const request = new Request(`http://localhost:3000/api/reviews/${title}`, {
-        method: 'GET',
-        headers: new Headers({
-            'Content-Type': 'application/json'
-        }),
-        mode: 'cors'
-    });
-    const r =  fetch(request)
-    .then((resp) => {return resp.json()})
-    .then((data) => {
-        if(data.ratingavg === 0){
-            document.getElementsByClassName('rating')[0].innerHTML =  `Avergae Rating : No Ratings Yet!`;
-        }
-        else{
-            document.getElementsByClassName('rating')[0].innerHTML =  `Avergae Rating : ${data.ratingavg}`;
-        }
-        if(data.reviewcount === 0){
-            document.getElementsByClassName('count')[0].innerHTML =  `Rating Count : No Users have rated this movie`;
-        }
-        else{
-            document.getElementsByClassName('count')[0].innerHTML =  `Rating Count : ${data.reviewcount}`;
-
-        }
-
-})
-
 
 // const forElement = document.querySelector("#form1");
 // formElement.addEventListener('submit', e => {
@@ -993,7 +1073,7 @@ function getaveragerating(title){
 //   fetch(request).then(res => {res.send()});
 // });
 
-// //login 
+// //login
 // // {
 // //     "email" : "anonymous123@gmail.com",
 // //     "password" : "123"
@@ -1012,4 +1092,3 @@ function getaveragerating(title){
 
 //   fetch(request).then(res => {res.send()});
 // });
-}

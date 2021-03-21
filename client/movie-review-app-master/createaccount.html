@@ -4,83 +4,104 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <style>
-    body {
-      background-color: black;
-      color: white;
-    }
-    .form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-.form-container {
-  display: flex;
-  flex-direction: column;
-  width: 25rem;
-  padding: 2rem;
-  border: 0.1rem #c0c0c0 solid;
-  border-radius: 0.5rem;
-  list-style-type: none;
-}
-.form-container li {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-}
-.button {
-  padding: 1rem;
-  border: 0.1rem #808080 solid;
-  border-radius: 0.5rem;
-  cursor: pointer;
-}
-.button:hover {
-  border: 0.1rem #404040 solid;
-}
-.button.primary {
-  background-color: #f0c040;
-}
-input {
-  padding: 1rem;
-  border: 0.1rem #c0c0c0 solid;
-  border-radius: 0.5rem;
-}
-#pwd {
-   margin-right: 180px;
-}
-
-a:hover{
-    text-decoration: underline;
-}
-  </style>
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/signup.css">
 </head>
 <body>
-  <div class = "form">
-    <form>
-        <ul class = "form-container">
-            <li style="font-family: 13px Arial;"><b style="font-family: Arial, Helvetica, sans-serif; font-size: 23px;">Create your Account</b></li>
-            <li>
-                <label for = "email">
-                  <span style="font-family: Arial, Helvetica, sans-serif; font-size: 15px;">Email</span>
-                </label>
-                <input type = "email" name = "email" id = "email"/>
-            </li>
-            <li>
-                <label for = "password">
-                  <span id = "pwd" style="font-family: Arial, Helvetica, sans-serif; font-size: 15px;">Password</span>
-                </label>
-                <input type =  "password" name = "password" id = "password" />
-            </li>
-            <li>
-                <button type = "submit" class = "button primary">
-                   Sign-Up
-                </button>
-            </li>
-        </ul>
-    </form>
+  <header>
+    <div class="hd-text">
+        <a style = "text-decoration: none;" href= "index.html" class = "title" > <h2>Movie City</h2></a>
     </div>
+</header>
+
+<div class="form-box">
+  <div class="wrapper">
+    <h3>Create Account</h3>
+    <div class="form">
+      <form class = "createnewact" method="POST">
+        <div class ='form-group'>
+          <label for="firstName">First Name</label>
+          <input type="text" name="firstName" id="firstName" required>
+        </div>
+        <div class ='form-group'>
+          <label for="lastName">Last Name</label>
+          <input type="text" name="lastName" id="lastName" required>
+        </div>
+        <div class ='form-group'>
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" required>
+        </div>
+        <div class ='form-group'>
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" required>
+        </div class ='form-group'>
+        <button type="submit">Create your account</button>
+      </form>
+    </div>
+    
+  </div>
+</div>
+<div class = "message"></div>
+
+
+<footer>
+  <div class="footer-text">
+      <h4>Made with <span class="fa fa-heart"></span> by Team1</h4>
+  </div>
+  <div class="footer-icons">
+      <ul>
+          <li> <a href="https://github.com/aangupta"class="fa fa-github"target="_blank"></a></li>
+          <li> <a href="https://www.linkedin.com/in/aanchal-gupta-3ab35bb1/" class="fa fa-linkedin" target="_blank"></a></li>
+          <li><a href="https://twitter.com/aangupta5"class="fa fa-twitter"target="_blank"></a> </li>
+          <li> <a href="mailto: aanchalgupta457@gmail.com" class="fa fa-envelope" target="_blank"></a> </li>
+      </ul>
+      
+  </div>
+</footer>
+
+  
 </body>
+
+<script>
+//   const formElement = document.querySelector(".createnewact");
+//   formElement.addEventListener('submit', e => {
+//   e.preventDefault();
+//   const formData = new FormData(formElement);
+//   console.log(...formData.entries());
+//   const request = new Request('http://localhost:3000/api/users/', {
+//       method: 'POST',
+//       headers: new Headers({
+//           'Content-Type': 'application/json'
+//       }),
+//       body: formData
+//   });
+//   fetch(request).then(res => res.json()).then(json => console.log(json));
+// })
+
+  const formElement = document.querySelector(".createnewact");
+  formElement.addEventListener('submit', e => {
+  e.preventDefault();
+  const formData = new FormData(formElement);
+  var object = {};
+formData.forEach((value, key) => object[key] = value);
+const json = JSON.stringify(object);
+    console.log(json);
+  const request = new Request('http://localhost:3000/api/users', {
+    method: 'POST',
+    headers : {
+    'Content-type': 'application/json; charset=UTF-8'
+    },
+    body: json
+  })
+  fetch(request).then(res => res.json()).then(data => {
+    alert(data.message);
+    window.location.href = "index.html";
+    });
+});
+
+</script>
 </html>

@@ -4,12 +4,16 @@ var genuuid = require('uuid').v4;
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const app = express();
+
+
 
 const api = require('./server/api');
 const db = require('./server/db');
 app.use(cors());
+app.use(bodyParser.json()); 
 
 //Configure .env
 require('dotenv').config();
