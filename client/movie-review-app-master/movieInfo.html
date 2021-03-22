@@ -72,7 +72,7 @@
   formData.append("movie_name", localStorage.getItem("moviename"));
   //formData.append("email", localStorage.getItem("email"));
   var object = {};
-    formData.forEach((value, key) => object[key] = value);
+formData.forEach((value, key) => object[key] = value);
 const json = JSON.stringify(object);
 console.log("Hi");
 

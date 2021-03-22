@@ -3,26 +3,12 @@ const path = require('path');
 var genuuid = require('uuid').v4;
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Origin', req.headers.origin);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, X-Response-Time, X-PINGOTHER, X-CSRF-Token,Authorization');
-    if (req.method === "OPTIONS") {
-        return res.status(200).end();
-    } else {
-        next();
-    }
-});
-
 
 const api = require('./server/api');
 const db = require('./server/db');
-app.use(cors({origin:true,credentials: true}));
 app.use(bodyParser.json()); 
 
 //Configure .env
@@ -53,9 +39,9 @@ db.connect({
     app.use(express.static(path.join(__dirname, 'build')));
 
     //Return index.html for routes not handled by build folder
-    app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-    });
+    // app.get('*', function (req, res) {
+    // res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    // });
 
     //Start listening on port
     app.listen(port, () => {
