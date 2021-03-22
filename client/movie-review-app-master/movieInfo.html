@@ -70,10 +70,12 @@
   e.preventDefault();
   const formData = new FormData(formElement);
   formData.append("movie_name", localStorage.getItem("moviename"));
-  formData.append("email", localStorage.getItem("email"));
+  //formData.append("email", localStorage.getItem("email"));
   var object = {};
-formData.forEach((value, key) => object[key] = value);
+    formData.forEach((value, key) => object[key] = value);
 const json = JSON.stringify(object);
+console.log("Hi");
+
     console.log(json);
   const request = new Request('http://localhost:3000/api/reviews/myratings', {
     method: 'POST',
@@ -92,7 +94,6 @@ const json = JSON.stringify(object);
     }
     })
     .catch(error => {
-        console.log("ss")
         closeForm();
         if(error === "Not logged in"){
         window.location.href = "signin.html";
